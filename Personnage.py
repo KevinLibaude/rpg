@@ -11,6 +11,7 @@ class Personnage:
         self.intelligence = intelligence
         self.charisme = charisme
         self.mort = False
+        self.degats = round(0.6*self.force)
 
     def estMort(self):
         if(self.vie > 0):
@@ -25,57 +26,86 @@ class Personnage:
         else:
             self.mort = True
             return f"{self.nom} est mort"
+        
+    def getVie(self):
+        return self.vie
+    
+    def getNom(self):
+        return self.nom
+    
+    def getForce(self):
+        return self.force
+    
+    def getEndurance(self):
+        return self.endurance
+    
+    def getRapidité(self):
+        return self.rapidité
+    
+    def getIntelligence(self):
+        return self.intelligence
+    
+    def getCharisme(self):
+        return self.charisme
+    
+    def getMort(self):
+        return self.mort
+    
+    def getDegats(self):
+        return self.degats
     
     def afficheCaractéristiques(self):
-        print(f"Nom : {self.nom}")
-        print(f"Vie : {self.vie}")
-        print(f"Force : {self.force}")
-        print(f"Endurance : {self.endurance}")
-        print(f"Rapidité : {self.rapidité}")
-        print(f"Intelligence : {self.intelligence}")
-        print(f"Charisme : {self.charisme}")
+        print(f"Nom : {self.getNom()}")
+        print(f"Vie : {self.getVie()}")
+        print(f"Force : {self.getForce()}")
+        print(f"Endurance : {self.getEndurance()}")
+        print(f"Rapidité : {self.getRapidité()}")
+        print(f"Intelligence : {self.getIntelligence()}")
+        print(f"Charisme : {self.getCharisme()}")
 
     def perdVie(self,degats):
-        if(self.vie < 0):
-            print(f"{self.nom} a subit une attaque mortelle et est mort")
-            return self.estMort()
+        if(self.getVie() < 0):
+            print(f"{self.getNom()} a subit une attaque mortelle et est mort")
+            return self.getMort()
         else:
             self.vie-=degats
 
     def gagneVie(self,pvGagnés):
-        if(self.mort != True):
+        if(self.getMort() != True):
             self.vie+= pvGagnés
-            return f"{self.nom} gagne {pvGagnés} points de vie"
+            return f"{self.getNom()} gagne {pvGagnés} points de vie"
         else:
-            return f"{self.nom} est mort et ne peut pas être soigné"
+            return f"{self.getNom()} est mort et ne peut pas être soigné"
 
     def attaque(self,ennemi):
-        if(ennemi.mort != True and self.mort != True):
-            degats = round(0.6*self.force)
-            ennemi.perdVie(degats)
-            return f"{self.nom} attaque {ennemi.nom} et lui inflige {degats} points de dégats"
-        elif(self.mort == True):
-            return f"{self.nom} est mort et ne peut pas attaquer"
+        if(ennemi.getMort() != True and self.getMort() != True):
+            ennemi.perdVie(self.degats)
+            return f"{self.getNom()} attaque {ennemi.getNom()} et lui inflige {self.degats} points de dégats"
+        elif(self.getMort() == True):
+            return f"{self.getNom()} est mort et ne peut pas attaquer"
         else:
-            return f"{ennemi.nom} est mort et ne peut pas recevoir d'attaque"
+            return f"{ennemi.getNom()} est mort et ne peut pas recevoir d'attaque"
         
     def soigne(self,autrePersonnage,pointSoignés):
-        if(autrePersonnage.mort != True and self.mort != True):
+        if(autrePersonnage.getMort() != True and self.getMort() != True):
             autrePersonnage.gagneVie(pointSoignés)
-            return f"{self.nom} soigne {autrePersonnage.nom} et lui donne {pointSoignés} points de vie"
-        elif(autrePersonnage.mort == True):
-            return f"{autrePersonnage.nom} est mort et ne peut pas recevoir de soin"
+            return f"{self.getNom()} soigne {autrePersonnage.getNom()} et lui donne {pointSoignés} points de vie"
+        elif(autrePersonnage.getMort() == True):
+            return f"{autrePersonnage.getNom()} est mort et ne peut pas recevoir de soin"
         else:
-            return f"{self.nom} est mort et ne peut pas donner de soin"
+            return f"{self.getNom()} est mort et ne peut pas donner de soin"
 
     def esquive(self,autrePersonnage):
-        if(autrePersonnage.mort != True and self.mort != True):
-            if(round(self.rapidité * 1.2) > autrePersonnage.force):
-                return f"{self.nom} esquive l'attaque de {autrePersonnage.nom} car {self.nom} a une rapidité de {self.rapidité} alors que {autrePersonnage.nom} a une rapidité de {autrePersonnage.rapidité}"
-        elif(autrePersonnage.mort == True):
-            return f"{autrePersonnage.nom} est mort et ne peut pas esquiver"
+        if(autrePersonnage.getMort() != True and self.getMort() != True):
+            if(round(self.getRapidité() * 1.2) > autrePersonnage.getRapidité()):
+                return f"{self.getNom()} esquive l'attaque de {autrePersonnage.getNom()} car {self.getNom()} a une rapidité de {self.getRapidité()} points alors que {autrePersonnage.getNom()} a une rapidité de {autrePersonnage.getRapidité()} points"
+            else:
+                return f"{self.getNom()} n'esquive pas l'attaque de {autrePersonnage.getNom()} car {self.getNom()} a une rapidité de {self.getRapidité()} points alors que {autrePersonnage.nom} a une rapidité de {autrePersonnage.getRapidité()} points"
+    
+        elif(autrePersonnage.getMort() == True):
+            return f"{autrePersonnage.getNom()} est mort et ne peut pas esquiver et {self.getNom()} ne peut donc pas lancer d'attaque"
         else:
-            return f"{self.nom} est mort et ne peut pas esquiver"
+            return f"{self.getNom()} est mort et ne peut donc pas esquiver"
 
     def seDeplace(self,pointDeplacement):
         pass
